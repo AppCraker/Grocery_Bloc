@@ -12,6 +12,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    homeBloc.add(HomeInitialFetchEvent());
+    super.initState();
+  }
   final HomeBloc homeBloc = HomeBloc();
 
   @override
@@ -28,7 +34,18 @@ class _HomeState extends State<Home> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
+        switch (state.runtimeType) {
+          case HomeLoadingState:
+
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+
+          );
+        
+          case HomeLoadedSuccessState:  
+          return Scaffold(
           appBar: AppBar(
             title: Text("Nagu Mart"),
             actions: [
@@ -47,8 +64,17 @@ class _HomeState extends State<Home> {
             ],
           ),
         );
+          
+          case HomeErrorState:
+          return Scaffold(
+            body: Center(child: Text("Error"),),
+          );
+          
+          default:
+          return SizedBox();
+        }
       },
     );
   }
 }
- 
+//  
